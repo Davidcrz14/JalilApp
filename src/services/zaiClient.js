@@ -4,29 +4,43 @@
  */
 
 // Prompt del sistema para identificación de residuos
-const SYSTEM_PROMPT = `Eres un experto en reciclaje y gestión de residuos. Tu tarea es identificar objetos en imágenes y clasificarlos según el tipo de residuo.
+const SYSTEM_PROMPT = `Eres un experto en identificación de objetos y reciclaje. Tu tarea es:
+1. IDENTIFICAR con precisión el objeto en la imagen (sé específico: no digas "envase" si es una "botella de Coca-Cola")
+2. Clasificar el residuo según el sistema de reciclaje
 
-Debes responder SIEMPRE en formato JSON con la siguiente estructura exacta (sin texto adicional):
+IMPORTANTE sobre el nombre del objeto:
+- Sé MUY ESPECÍFICO: "Botella de agua de plástico", "Lata de Coca-Cola", "Caja de cereales Kellogg's"
+- Si ves una marca, menciónala: "Botella de Fanta", "Envase de yogur Danone"
+- Describe el material: "Vaso de plástico transparente", "Bolsa de papas Sabritas"
+- Si no identificas la marca, describe el objeto: "Botella de plástico verde de 500ml"
+
+Responde SIEMPRE en formato JSON con esta estructura exacta:
 {
   "identified": true,
-  "name": "nombre del objeto en español",
+  "name": "nombre específico y detallado del objeto",
   "category": "plastico|metal|papel|vidrio|organico|otros",
   "container": "amarillo|azul|verde|marron|gris",
   "containerName": "Contenedor [Color]",
   "confidence": 0.95,
-  "preparation": ["paso 1", "paso 2", "paso 3"],
-  "tips": ["consejo 1", "consejo 2"]
+  "preparation": ["paso 1 específico", "paso 2 específico", "paso 3 específico"],
+  "tips": ["consejo útil 1", "consejo útil 2"]
 }
 
-Reglas de clasificación:
-- Amarillo: plásticos, envases, latas, tetrabriks, bolsas
-- Azul: papel, cartón, periódicos, revistas
-- Verde: vidrio (botellas, frascos)
-- Marrón: residuos orgánicos (frutas, verduras, restos de comida)
-- Gris: residuos no reciclables (pañales, colillas, cerámica)
+Clasificación de contenedores:
+- AMARILLO: Botellas plástico, latas aluminio, tetrabriks, bolsas plástico, envases
+- AZUL: Papel, cartón, periódicos, revistas, cajas
+- VERDE: Botellas vidrio, frascos vidrio (NO cerámica, NO espejos)
+- MARRÓN: Restos comida, frutas, verduras, cáscaras, posos café
+- GRIS: Pañales, colillas, cerámica, polvo, lo que no va en otros
 
-Si no puedes identificar el objeto claramente, responde con "identified": false.
-Responde SOLO con el JSON, sin explicaciones adicionales.`;
+Ejemplos de nombres buenos:
+- "Botella de Coca-Cola de 600ml"
+- "Lata de atún Dolores"
+- "Caja de Amazon de cartón"
+- "Cáscara de plátano"
+- "Vaso de Starbucks (papel con tapa plástica)"
+
+Responde SOLO con el JSON, sin texto adicional.`;
 
 // URL base de la API de Z.AI (BigModel/Zhipu)
 const API_BASE_URL = "https://open.bigmodel.cn/api/paas/v4";
@@ -69,7 +83,7 @@ class ZaiClientService {
             content: [
               {
                 type: "text",
-                text: "Identifica este objeto y dime en qué contenedor de reciclaje debe ir. Responde solo con JSON.",
+                text: "Mira esta imagen atentamente. ¿Qué objeto específico ves? Dame el nombre exacto del producto si puedes ver la marca (ej: 'Botella de Coca-Cola 600ml'). Clasifícalo para reciclaje. Responde SOLO en JSON.",
               },
               {
                 type: "image_url",
