@@ -4,15 +4,19 @@
  */
 
 // Prompt del sistema para identificación de residuos
-const SYSTEM_PROMPT = `Eres un experto en identificación de objetos y reciclaje. Tu tarea es:
-1. IDENTIFICAR con precisión el objeto en la imagen (sé específico: no digas "envase" si es una "botella de Coca-Cola")
-2. Clasificar el residuo según el sistema de reciclaje
+const SYSTEM_PROMPT = `Eres un experto en identificación de objetos y reciclaje.
 
-IMPORTANTE sobre el nombre del objeto:
-- Sé MUY ESPECÍFICO: "Botella de agua de plástico", "Lata de Coca-Cola", "Caja de cereales Kellogg's"
-- Si ves una marca, menciónala: "Botella de Fanta", "Envase de yogur Danone"
-- Describe el material: "Vaso de plástico transparente", "Bolsa de papas Sabritas"
-- Si no identificas la marca, describe el objeto: "Botella de plástico verde de 500ml"
+IMPORTANTE - PROCESO DE IDENTIFICACIÓN:
+1. OBSERVA CUIDADOSAMENTE la imagen completa antes de responder
+2. IDENTIFICA las características visuales principales del objeto (forma, color, textura, material)
+3. VERIFICA que tu identificación coincida con lo que realmente ves
+4. Si NO estás seguro, indica "objeto no identificado claramente" en lugar de adivinar
+
+REGLAS ESTRICTAS:
+- NO asumas el tipo de objeto sin verificar visualmente
+- Sé ESPECÍFICO: describe marca, material, tamaño si es visible
+- Si ves texto o etiquetas en el objeto, menciónalo
+- Si el objeto no es un residuo común, indícalo claramente
 
 Responde SIEMPRE en formato JSON con esta estructura exacta:
 {
@@ -49,7 +53,7 @@ const API_BASE_URL = "https://open.bigmodel.cn/api/paas/v4";
 class ZaiClientService {
   constructor(apiKey = null) {
     this.apiKey = apiKey;
-    this.model = "glm-4.6v-flash";
+    this.model = "glm-4.6v";
   }
 
   /**
@@ -83,7 +87,7 @@ class ZaiClientService {
             content: [
               {
                 type: "text",
-                text: "Mira esta imagen atentamente. ¿Qué objeto específico ves? Dame el nombre exacto del producto si puedes ver la marca (ej: 'Botella de Coca-Cola 600ml'). Clasifícalo para reciclaje. Responde SOLO en JSON.",
+                text: "Analiza CUIDADOSAMENTE esta imagen. Describe primero qué ves (forma, color, características visuales) y luego identifica el objeto específico. Si ves texto o marcas, inclúyelos. NO adivines si no estás seguro. Responde SOLO en JSON.",
               },
               {
                 type: "image_url",
@@ -97,7 +101,7 @@ class ZaiClientService {
           },
         ],
         max_tokens: 500,
-        temperature: 0.3,
+        temperature: 0.1, // Temperatura baja para más precisión
       };
 
       console.log("ZaiClient: Enviando solicitud a la API...");
