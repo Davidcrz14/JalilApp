@@ -1,0 +1,209 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1e293b;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #475569;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #64748b;
+}
+
+/* Base styles */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-deep-dark text-white font-inter antialiased;
+  overflow-x: hidden;
+}
+
+/* Glassmorphism utility */
+@layer components {
+  .glass {
+    @apply bg-white/5 backdrop-blur-lg border border-white/10 shadow-xl;
+  }
+
+  .glass-dark {
+    @apply bg-black/20 backdrop-blur-lg border border-white/5;
+  }
+
+  .glass-card {
+    @apply bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl;
+  }
+
+  .btn-primary {
+    @apply bg-gradient-to-r from-eco-green-500 to-eco-green-600 hover:from-eco-green-600 hover:to-eco-green-700
+           text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300
+           shadow-lg shadow-eco-green-500/25 hover:shadow-eco-green-500/40
+           active:scale-95 transform;
+  }
+
+  .btn-secondary {
+    @apply bg-white/10 hover:bg-white/20 text-white font-medium py-2.5 px-5 rounded-xl
+           transition-all duration-300 border border-white/10 hover:border-white/20;
+  }
+
+  .card-hover {
+    @apply transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl;
+  }
+
+  .text-gradient {
+    @apply bg-gradient-to-r from-eco-green-400 via-eco-green-300 to-ocean-blue-400 bg-clip-text text-transparent;
+  }
+
+  .container-blue {
+    @apply bg-ocean-blue-500/20 border-ocean-blue-500/50 text-ocean-blue-300;
+  }
+
+  .container-green {
+    @apply bg-eco-green-500/20 border-eco-green-500/50 text-eco-green-300;
+  }
+
+  .container-yellow {
+    @apply bg-solar-yellow-500/20 border-solar-yellow-500/50 text-solar-yellow-300;
+  }
+
+  .container-gray {
+    @apply bg-gray-500/20 border-gray-500/50 text-gray-300;
+  }
+}
+
+/* Animations */
+@layer utilities {
+  .animate-delay-100 {
+    animation-delay: 100ms;
+  }
+
+  .animate-delay-200 {
+    animation-delay: 200ms;
+  }
+
+  .animate-delay-300 {
+    animation-delay: 300ms;
+  }
+
+  .animate-delay-400 {
+    animation-delay: 400ms;
+  }
+}
+
+/* Gradient backgrounds */
+.bg-gradient-radial {
+  background: radial-gradient(ellipse at center, var(--tw-gradient-stops));
+}
+
+.bg-mesh {
+  background-color: #0f172a;
+  background-image: radial-gradient(
+      at 40% 20%,
+      rgba(16, 185, 129, 0.15) 0px,
+      transparent 50%
+    ),
+    radial-gradient(at 80% 0%, rgba(59, 130, 246, 0.1) 0px, transparent 50%),
+    radial-gradient(at 0% 50%, rgba(245, 158, 11, 0.1) 0px, transparent 50%),
+    radial-gradient(at 80% 50%, rgba(16, 185, 129, 0.1) 0px, transparent 50%),
+    radial-gradient(at 0% 100%, rgba(59, 130, 246, 0.1) 0px, transparent 50%);
+}
+
+/* Camera overlay */
+.camera-overlay {
+  background: linear-gradient(
+    to bottom,
+    rgba(15, 23, 42, 0.8) 0%,
+    transparent 20%,
+    transparent 80%,
+    rgba(15, 23, 42, 0.8) 100%
+  );
+}
+
+/* Scan animation */
+@keyframes scan {
+  0% {
+    top: 0%;
+  }
+  50% {
+    top: 100%;
+  }
+  100% {
+    top: 0%;
+  }
+}
+
+.scan-line {
+  animation: scan 2s ease-in-out infinite;
+}
+
+/* Pulse ring animation */
+@keyframes pulse-ring {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+
+.pulse-ring {
+  animation: pulse-ring 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Page transitions */
+.page-enter {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.page-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 300ms ease-out, transform 300ms ease-out;
+}
+
+.page-exit {
+  opacity: 1;
+}
+
+.page-exit-active {
+  opacity: 0;
+  transition: opacity 200ms ease-in;
+}
+
+/* Counter animation */
+@keyframes countUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.count-up {
+  animation: countUp 0.5s ease-out forwards;
+}
+
+/* Tab indicator */
+.tab-indicator {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
