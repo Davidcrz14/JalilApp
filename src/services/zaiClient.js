@@ -53,7 +53,7 @@ const API_BASE_URL = "https://open.bigmodel.cn/api/paas/v4";
 class ZaiClientService {
   constructor(apiKey = null) {
     this.apiKey = apiKey;
-    this.model = "glm-4.6v";
+    this.model = "glm-4.6v-flash";
   }
 
   /**
